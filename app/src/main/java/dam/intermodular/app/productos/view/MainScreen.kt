@@ -282,7 +282,6 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                         singleLine = true,
                         modifier = Modifier
                             .weight(1f)
-                             .height(55.dp)
                             .background(Color.Transparent)
                     )
                     IconButton(onClick = { showFilterDialog.value = true }) {
