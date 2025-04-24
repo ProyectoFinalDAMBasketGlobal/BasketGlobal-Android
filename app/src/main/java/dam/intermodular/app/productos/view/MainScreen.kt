@@ -76,6 +76,7 @@ fun ProductoCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
+                    .align(Alignment.CenterHorizontally)
             )
             Box(modifier = Modifier.fillMaxSize()) {
                 // Content before the heart icon
@@ -323,29 +324,16 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                                             productosViewModel = productosViewModel,
                                             onClick = {
                                                 try {
-                                                    val encodedNombre = URLEncoder.encode(
-                                                        producto.nombre,
-                                                        StandardCharsets.UTF_8.toString()
-                                                    )
-                                                    val encodedDescripcion = URLEncoder.encode(
-                                                        producto.descripcion,
-                                                        StandardCharsets.UTF_8.toString()
-                                                    )
-                                                    val encodedImagenBase64 =
-                                                        producto.imagenBase64.let {
-                                                            URLEncoder.encode(
-                                                                it,
-                                                                StandardCharsets.UTF_8.toString()
-                                                            )
-                                                        } ?: ""
-                                                    val formattedPrecio =
-                                                        String.format("%.2f", producto.precio)
-                                                    val stock = URLEncoder.encode(
-                                                        producto.stock.toString(),
-                                                        StandardCharsets.UTF_8.toString()
-                                                    )
+                                                    val encodedNombre = encodeForNav(producto.nombre)
+                                                    val encodedDescripcion = encodeForNav(producto.descripcion)
+                                                    val encodedImagenBase64 = encodeForNav(producto.imagenBase64)
+                                                    val formattedPrecio = String.format("%.2f", producto.precio)
+                                                    val encodedStock = encodeForNav(producto.stock.toString())
+                                                    val encodedPreviousScreen = encodeForNav("main_screen")
                                                     val roomId = producto._id
-                                                    navController.navigate("producto_details_screen/$roomId/$encodedNombre/$encodedDescripcion/$formattedPrecio/$stock/$encodedImagenBase64/main_screen")
+
+                                                    navController.navigate("producto_details_screen/$roomId/$encodedNombre/$encodedDescripcion/$formattedPrecio/$encodedStock/$encodedImagenBase64/$encodedPreviousScreen")
+
                                                 } catch (e: Exception) {
                                                     e.printStackTrace()
                                                     Toast.makeText(
@@ -384,4 +372,8 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
 
         }
     }
+}
+
+fun encodeForNav(value: String): String {
+    return URLEncoder.encode(value, StandardCharsets.UTF_8.toString()).replace("+", "%20")
 }
