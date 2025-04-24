@@ -2,6 +2,7 @@ package dam.intermodular.app.productos.view
 
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,68 +15,117 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 
+// Generador de notificaciones promocionales y persuasivas
+fun generarNotificacion(): String {
+    val inicios = listOf(
+        "¡No te lo pierdas!",
+        "Novedades en BasketGlobal:",
+        "Solo por hoy:",
+        "Estás a un clic de mejorar tu juego.",
+        "Tu estilo en la cancha merece esto:"
+    )
+
+    val promociones = listOf(
+        "Nuevas camisetas retro de leyendas del baloncesto.",
+        "Balones oficiales con 20% de descuento.",
+        "Zapatillas de alto rendimiento recién llegadas.",
+        "Merchandising exclusivo de equipos NBA.",
+        "Sudaderas y gorras con diseños únicos de baloncesto."
+    )
+
+    val llamados = listOf(
+        "Explora ahora en la tienda.",
+        "Haz clic y descúbrelo.",
+        "No dejes pasar esta oportunidad.",
+        "Equípate como un profesional.",
+        "La oferta expira pronto."
+    )
+
+    return "${inicios.random()} ${promociones.random()} ${llamados.random()}"
+}
 
 @Composable
 fun Notification(
     isVisible: Boolean,
     onDismiss: () -> Unit,
 ) {
-    val notificaciones = listOf(
-        "Gracias por confiar en nosotros y usar nuestros servicios.",
-        "Oferta limitada: Algunas habitaciones cuentan con oferta.",
-        "Actualización disponible en los próximos días.",
-        "Verificación en dos pasos estará disponible muy pronto."
-    )
+    // Regenerar notificaciones cada vez que se muestra el diálogo
+    val notificaciones = remember { mutableStateListOf<String>() }
+    var wasVisible by remember { mutableStateOf(false) }
+    val hasClosed = remember { mutableStateOf(false) }
 
-    // Estado para el color de fondo cuando el ratón pasa por encima
-    var hoveredIndex by remember { mutableIntStateOf(-1) }
+    // Este efecto detecta cambios en la visibilidad
+    LaunchedEffect(isVisible) {
+        if (!isVisible && notificaciones.isEmpty()) {
+            // La ventana se cerró y estaba vacía
+            hasClosed.value = true
+        }
+        if (isVisible && notificaciones.isEmpty()) {
+            // La ventana se abrió y no hay notificaciones
+            if (hasClosed.value) {
+                repeat(5) { notificaciones.add(generarNotificacion()) }
+                hasClosed.value = false
+            }
+        }
+        // Actualizamos el estado anterior
+        wasVisible = isVisible
+    }
 
+    val hoveredIndex by remember { mutableIntStateOf(-1) }
 
     if (isVisible) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text(text = "Notificaciones", color = MaterialTheme.colorScheme.primary)},
+            title = { Text("Promociones", color = MaterialTheme.colorScheme.primary) },
             text = {
-                Box(modifier = Modifier.height(500.dp)) { // Aumenta la altura del contenedor
-                    Column(modifier = Modifier) {
-                        notificaciones.forEachIndexed { index, notification ->
-
+                Box(modifier = Modifier.height(500.dp)) {
+                    Column {
+                        notificaciones.toList().forEachIndexed { index, notification ->
                             val borderColor = if (hoveredIndex == index) {
-                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f) // Color de borde cuando está hovered
+                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
                             } else {
-                                Color(0xFFD1A7E3) // Morado claro como color de borde cuando no está hovered
+                                Color(0xFFD1A7E3)
                             }
+
+                            var offsetX by remember { mutableFloatStateOf(0f) }
 
                             Text(
                                 text = notification,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .border(width = 2.dp, color = borderColor)
+                                    .padding(horizontal = 4.dp)
+                                    .border(
+                                        width = 2.dp,
+                                        color = borderColor,
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
                                     .padding(5.dp)
-                                    .pointerInput(Unit) {
-                                        awaitPointerEventScope {
-                                            while (true) {
-                                                val event = awaitPointerEvent()
-                                                hoveredIndex = if (event.changes.any { it.pressed }) {
-                                                    index
-                                                } else {
-                                                    -1
-                                                }
+                                    .pointerInput(notification) { // Usar el texto como clave estable
+                                        detectHorizontalDragGestures { _, dragAmount ->
+                                            offsetX += dragAmount
+                                            if (kotlin.math.abs(offsetX) > 100f) {
+                                                notificaciones.remove(notification)
                                             }
                                         }
                                     },
                                 color = MaterialTheme.colorScheme.onBackground
                             )
+                            Spacer(modifier = Modifier.height(15.dp))
+                        }
 
-                            // Espacio reducido entre los comentarios, puedes ajustarlo según sea necesario
-                            Spacer(modifier = Modifier.height(15.dp)) // Espacio más pequeño entre comentarios
+                        if (notificaciones.isEmpty()) {
+                            Text("¡Has eliminado todas las notificaciones!", color = MaterialTheme.colorScheme.secondary)
                         }
                     }
                 }
@@ -94,5 +144,4 @@ fun Notification(
             shape = RoundedCornerShape(16.dp)
         )
     }
-
 }
