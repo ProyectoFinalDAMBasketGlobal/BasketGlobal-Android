@@ -72,17 +72,29 @@ fun FilterFragment(
                     )
                 }
             },
-            confirmButton = {
-                Button(onClick = {
-                    applyFilters(priceRange, capacity, type, origen)
-                    onDismiss() // Cerrar el dialogo
-                }) {
-                    Text("Aplicar")
-                }
-            },
+            confirmButton = {},
             dismissButton = {
-                Button(onClick = { onDismiss() }) {
-                    Text("Cancelar")
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onDismiss() },
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text("Cancelar")
+                    }
+
+                    Button(
+                        onClick = {
+                            applyFilters(priceRange, capacity, type, origen)
+                            onDismiss()
+                        }
+                    ) {
+                        Text("Aplicar")
+                    }
                 }
             }
         )
