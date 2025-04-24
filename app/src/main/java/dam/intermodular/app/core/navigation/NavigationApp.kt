@@ -166,6 +166,8 @@ fun NavigationApp(){
                 navArgument("previousScreen") { type = NavType.StringType }
         )
         ) { backStackEntry ->
+            
+            /*
             val roomId = backStackEntry.arguments?.getString("roomId") ?: ""
             val roomName = backStackEntry.arguments?.getString("roomName") ?: ""
             val roomDescription = backStackEntry.arguments?.getString("roomDescription") ?: ""
@@ -173,6 +175,15 @@ fun NavigationApp(){
             val stock = backStackEntry.arguments?.getInt("stock") ?: 0
             val roomImage = backStackEntry.arguments?.getString("roomImage") ?: ""
             val previousScreen = backStackEntry.arguments?.getString("previousScreen") ?: ""
+            */
+
+            val roomId = backStackEntry.arguments?.getString("roomId") ?: ""
+            val roomName = URLDecoder.decode(backStackEntry.arguments?.getString("roomName") ?: "", "UTF-8")
+            val roomDescription = URLDecoder.decode(backStackEntry.arguments?.getString("roomDescription") ?: "", "UTF-8")
+            val roomPrice = URLDecoder.decode(backStackEntry.arguments?.getString("roomPrice") ?: "", "UTF-8")
+            val stock = backStackEntry.arguments?.getString("stock")?.toIntOrNull() ?: 0
+            val roomImage = URLDecoder.decode(backStackEntry.arguments?.getString("roomImage") ?: "", "UTF-8")
+            val previousScreen = URLDecoder.decode(backStackEntry.arguments?.getString("previousScreen") ?: "", "UTF-8")
 
             ProductoDetailsFragment(
                 navController = navController,
