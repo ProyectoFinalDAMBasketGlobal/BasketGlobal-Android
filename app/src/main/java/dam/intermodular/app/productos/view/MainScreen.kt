@@ -157,7 +157,7 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
 
     val categorias = listOf(
         "Productos recomendados",
-        "Balones de baloncesto",
+        "Balones baloncesto",
         "Ropa deportiva",
         "Merchandising",
         "Otros"
@@ -213,49 +213,79 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                 )
             },
             bottomBar = {
-                Row(
+                BottomAppBar(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.Bottom
+                        .height(69.dp),
+                    containerColor = Color.Black // Fondo negro como en tu ejemplo
                 ) {
-                    IconButton(onClick = { navController.navigate("main_screen") }) {
-                        Icon(Icons.Filled.Home, contentDescription = "Home")
-                    }
-
-                    IconButton(onClick = { navController.navigate("adquisiciones_screen") }) {
-                        Icon(Icons.Filled.Search, contentDescription = "Historial")
-                    }
-
-                    IconButton(
-                        onClick = {
-                            // Mostrar mensaje (Toast) cada vez que se pulse el botón
-                            Toast.makeText(
-                                context,
-                                "¡BIENVENIDOS A NIGHT DAYS!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.Filled.Info, contentDescription = "Info")
-                    }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceAround, // Espaciado entre íconos
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(onClick = { navController.navigate("main_screen") }) {
+                                Icon(
+                                    Icons.Filled.Home,
+                                    contentDescription = "Home",
+                                    modifier = Modifier.size(30.dp),
+                                    tint = Color.White // Íconos blancos
+                                )
+                            }
 
-                    IconButton(onClick = { navController.navigate("favorites_screen") }) {
-                        Icon(Icons.Filled.Favorite, contentDescription = "Favorite")
-                    }
+                            IconButton(onClick = { navController.navigate("adquisiciones_screen") }) {
+                                Icon(
+                                    Icons.Filled.Search,
+                                    contentDescription = "Historial",
+                                    modifier = Modifier.size(30.dp),
+                                    tint = Color.White
+                                )
+                            }
 
-                    IconButton(onClick = {
-                        if (idUsuario.isNotEmpty()) {  // Verifica que idUsuario no esté vacío
-                            navController.navigate("profile_screen/$idUsuario") // Pasar el ID real
-                        } else {
-                            Log.e("Navigation Error", "El idUsuario está vacío o nulo.")
+                            IconButton(onClick = {
+                                Toast.makeText(
+                                    context,
+                                    "¡BIENVENIDOS A NIGHT DAYS!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }) {
+                                Icon(
+                                    Icons.Filled.Info,
+                                    contentDescription = "Info",
+                                    modifier = Modifier.size(30.dp),
+                                    tint = Color.White
+                                )
+                            }
+
+                            IconButton(onClick = { navController.navigate("favorites_screen") }) {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = "Favorite",
+                                    modifier = Modifier.size(30.dp),
+                                    tint = Color.White
+                                )
+                            }
+
+                            IconButton(onClick = {
+                                if (idUsuario.isNotEmpty()) {
+                                    navController.navigate("profile_screen/$idUsuario")
+                                } else {
+                                    Log.e("Navigation Error", "El idUsuario está vacío o nulo.")
+                                }
+                            }) {
+                                Icon(
+                                    Icons.Filled.Person,
+                                    contentDescription = "Profile",
+                                    modifier = Modifier.size(30.dp),
+                                    tint = Color.White
+                                )
+                            }
                         }
-                    }) {
-                        Icon(Icons.Filled.Person, contentDescription = "Profile")
                     }
-
                 }
             }
         ) { paddingValues ->
@@ -263,7 +293,7 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(bottom = 72.dp)
+                    .padding(bottom = 5.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -272,7 +302,7 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                             MaterialTheme.colorScheme.surface,
                             shape = RoundedCornerShape(8.dp)
                         )
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        .padding(horizontal = 9.dp, vertical = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(Icons.Filled.Search, contentDescription = "Search")
@@ -290,7 +320,7 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(15.dp))
 
                 if (filteredProductos.isEmpty()) {
                     Text(
@@ -307,7 +337,7 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                                 Text(
                                     text = categoria,
                                     style = MaterialTheme.typography.titleLarge,
-                                    modifier = Modifier.padding(vertical = 8.dp)
+                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp)
                                 )
                             }
                             item {
@@ -328,7 +358,11 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                                                     val encodedDescripcion = encodeForNav(producto.descripcion)
                                                     val encodedImagenBase64 = encodeForNav(producto.imagenBase64)
                                                     val formattedPrecio = String.format("%.2f", producto.precio)
-                                                    val encodedStock = encodeForNav(producto.stock.toString())
+                                                    //val encodedStock = encodeForNav(producto.stock.toString())
+                                                    val encodedStock = URLEncoder.encode(
+                                                        producto.stock.toString(),
+                                                        StandardCharsets.UTF_8.toString()
+                                                    )
                                                     val encodedPreviousScreen = encodeForNav("main_screen")
                                                     val roomId = producto._id
 
