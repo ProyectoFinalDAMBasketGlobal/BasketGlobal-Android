@@ -36,6 +36,7 @@ import dam.intermodular.app.verificationCode.presentation.view.VerificationCodeS
 import dam.intermodular.app.verificationCode.presentation.viewModel.VerificationCodeViewModel
 import dam.intermodular.app.verifyProfile.presentation.view.VerifyProfileScreen
 import dam.intermodular.app.verifyProfile.presentation.viewModel.VerifyProfileViewModel
+import java.net.URLDecoder
 import kotlin.reflect.typeOf
 
 
@@ -181,8 +182,10 @@ fun NavigationApp(){
             val roomName = URLDecoder.decode(backStackEntry.arguments?.getString("roomName") ?: "", "UTF-8")
             val roomDescription = URLDecoder.decode(backStackEntry.arguments?.getString("roomDescription") ?: "", "UTF-8")
             val roomPrice = URLDecoder.decode(backStackEntry.arguments?.getString("roomPrice") ?: "", "UTF-8")
-            val stock = backStackEntry.arguments?.getString("stock")?.toIntOrNull() ?: 0
-            val roomImage = URLDecoder.decode(backStackEntry.arguments?.getString("roomImage") ?: "", "UTF-8")
+            //val stock = backStackEntry.arguments?.getString("stock")?.toIntOrNull() ?: 0
+            val stock = backStackEntry.arguments?.getInt("stock") ?: 0
+            //val roomImage = URLDecoder.decode(backStackEntry.arguments?.getString("roomImage") ?: "", "UTF-8")
+            val roomImage = backStackEntry.arguments?.getString("roomImage") ?: ""
             val previousScreen = URLDecoder.decode(backStackEntry.arguments?.getString("previousScreen") ?: "", "UTF-8")
 
             ProductoDetailsFragment(
