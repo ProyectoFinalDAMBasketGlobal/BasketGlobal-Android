@@ -95,13 +95,14 @@ fun ProductoCard(
 
                     Spacer(modifier = Modifier.height(8.dp))  // Espacio entre nombre y precios
 
-                    // Mostrar el precio original con texto, tachado
-                    Text(
-                        text = "Original: ${"%.2f".format(producto.precio_original ?: 0.0)}€", // Precio original en euros
-                        style = MaterialTheme.typography.bodySmall.copy(textDecoration = TextDecoration.LineThrough),
-                        color = Color.Red
-                    )
-
+                   if((producto.precio_original ?: 0.0) != producto.precio) {
+                        // Mostrar el precio original con texto, tachado
+                        Text(
+                            text = "Original: ${"%.2f".format(producto.precio_original ?: 0.0)}€", // Precio original en euros
+                            style = MaterialTheme.typography.bodySmall.copy(textDecoration = TextDecoration.LineThrough),
+                            color = Color.Red
+                        )
+                    }
                     // Mostrar el precio por noche con texto
                     Text(
                         text = "Actual: ${"%.2f".format(producto.precio)}€", // Precio por noche en euros
