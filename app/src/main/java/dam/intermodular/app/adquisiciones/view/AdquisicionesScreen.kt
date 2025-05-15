@@ -194,10 +194,10 @@ fun AdquisicionItem(adquisicion: Adquisicion, producto: Producto, onInfoClick: (
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
                 color = when (adquisicion.estado) {
-                    "Pendiente" -> Color.Blue
-                    "Confirmada" -> Color.Green
-                    "Cancelada" -> Color.Red
-                    else -> Color.Gray
+                    "Pendiente" -> Color(0xFF1E90FF)
+                    "Confirmada" -> Color(0xFF2E8B57)
+                    "Cancelada" -> Color(0xFFDC143C)
+                    else ->  Color(0xFF808080)
                 }
             )
 
