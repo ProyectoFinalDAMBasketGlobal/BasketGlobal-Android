@@ -51,14 +51,16 @@ fun LoginScreen(navigationTo : NavController, viewModel: LoginViewModel){
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "BasketGlobal",
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 50.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
             )
             Spacer(modifier = Modifier.height(36.dp))
             Text(
                 text = "Email",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.White
             )
             EmailTextFiel(email) { newEmail ->
                 viewModel.onLoginChange(newEmail, password)
@@ -67,7 +69,8 @@ fun LoginScreen(navigationTo : NavController, viewModel: LoginViewModel){
             Text(
                 text = "Password",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.White
             )
             PasswordTextField (password) { newPassword ->
                 viewModel.onLoginChange(email,newPassword)
