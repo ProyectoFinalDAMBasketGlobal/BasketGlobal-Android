@@ -11,11 +11,10 @@ import androidx.compose.ui.unit.dp
 fun FilterFragment(
     isVisible: Boolean,
     onDismiss: () -> Unit,
-    applyFilters: (String?, String?, String?, String?) -> Unit
+    applyFilters: (String?, String?, String?) -> Unit
 ) {
     // Crear estado para cada campo del filtro
     var priceRange by remember { mutableStateOf("") }
-    var capacity by remember { mutableStateOf("") }
     var type by remember { mutableStateOf("") }
     var origen by remember { mutableStateOf("") }
 
@@ -35,17 +34,6 @@ fun FilterFragment(
                         value = priceRange,
                         onValueChange = { priceRange = it },
                         label = { Text("Escribe rango de precio") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Filtro de capacidad
-                    Text("Capacidad:")
-                    TextField(
-                        value = capacity,
-                        onValueChange = { capacity = it },
-                        label = { Text("Escribe capacidad") },
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -89,7 +77,7 @@ fun FilterFragment(
 
                     Button(
                         onClick = {
-                            applyFilters(priceRange, capacity, type, origen)
+                            applyFilters(priceRange, type, origen)
                             onDismiss()
                         }
                     ) {
@@ -104,5 +92,5 @@ fun FilterFragment(
 @Preview(showBackground = true)
 @Composable
 fun FilterFragmentPreview() {
-    FilterFragment(isVisible = true, onDismiss = {}, applyFilters = { _, _, _, _ -> })
+    FilterFragment(isVisible = true, onDismiss = {}, applyFilters = { _, _, _ -> })
 }
