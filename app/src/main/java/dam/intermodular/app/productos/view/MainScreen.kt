@@ -166,8 +166,8 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
 
     // Función que aplica los filtros
     val applyFilters =
-        { priceRange: String?, capacity: String?, roomType: String?, origen: String? ->
-            productosViewModel.applyFilters(priceRange, capacity, roomType, origen)
+        { priceRange: String?, roomType: String?, origen: String? ->
+            productosViewModel.applyFilters(priceRange, roomType, origen)
         }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -392,8 +392,8 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
             FilterFragment(
                 isVisible = showFilterDialog.value,
                 onDismiss = { showFilterDialog.value = false },
-                applyFilters = { priceRange, capacity, roomType, origen ->
-                    applyFilters(priceRange, capacity, roomType, origen)
+                applyFilters = { priceRange, roomType, origen ->
+                    applyFilters(priceRange, roomType, origen)
                     showFilterDialog.value =
                         false // Cerrar el diálogo después de aplicar los filtros
                 }
