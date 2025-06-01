@@ -86,20 +86,19 @@ class ProductosViewModel @Inject constructor(
 
     fun applyFilters(
         priceRange: String?,
-        marca: String?,
         roomType: String?,
         origen: String?,
     ) {
         _filteredProductos.update { productos ->
             // Verificamos si hay filtros aplicados
-            val isFiltering = priceRange != null || marca != null || roomType != null || origen != null
+            val isFiltering = priceRange != null || roomType != null || origen != null
 
             if (!isFiltering) {
-                // Si no hay filtros, mostrar todas las habitaciones
+                // Si no hay filtros, mostrar todas los productos
                 return@update productos
             }
 
-            // Filtrar las habitaciones
+            // Filtrar los productos
             val filtered = productos.filter { producto ->
                 // Filtrar por precio (si el filtro es no nulo)
                 val matchesPrice = priceRange?.let {
@@ -112,31 +111,26 @@ class ProductosViewModel @Inject constructor(
                     } catch (e: Exception) {
                         false
                     }
-                } ?: true // Si no hay filtro, pasa
+                } != false // Si no hay filtro, pasa
 
-                // Filtrar por capacidad (si el filtro es no nulo)
-                val matchesCapacity = marca?.let {
-                    producto.marca == marca
-                } ?: true
-
-                // Filtrar por tipo de habitación (si el filtro es no nulo)
+                // Filtrar por tipo de producto (si el filtro es no nulo)
                 val matchesRoomType = roomType?.let {
                     producto.categoria.contains(roomType, ignoreCase = true)
-                } ?: true
+                } != false
 
-                // Filtrar por tipo de habitación (si el filtro es no nulo)
+                // Filtrar por tipo de producto (si el filtro es no nulo)
                 val matchesOrigen = origen?.let {
-                    producto.categoria.contains(origen, ignoreCase = true)
-                } ?: true
+                    producto.origen.contains(origen, ignoreCase = true)
+                } != false
 
 
-                // Solo devolver habitaciones que coincidan con todos los filtros activos
-                matchesPrice && matchesCapacity && matchesRoomType
+                // Solo devolver productos que coincidan con todos los filtros activos
+                matchesPrice && matchesRoomType && matchesOrigen
             }
 
-            // Verifica si no se encontraron habitaciones
+            // Verifica si no se encontraron productos
             if (filtered.isEmpty()) {
-                println("No rooms available for this filter.")
+                println("No productos disponibles")
             }
 
             filtered
