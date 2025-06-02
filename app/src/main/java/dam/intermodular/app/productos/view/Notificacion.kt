@@ -89,7 +89,7 @@ fun Notification(
             onDismissRequest = onDismiss,
             title = { Text("Promociones", color = MaterialTheme.colorScheme.primary) },
             text = {
-                Box(modifier = Modifier.height(500.dp)) {
+                Box(modifier = Modifier.height(400.dp)) {
                     Column {
                         notificaciones.toList().forEachIndexed { index, notification ->
                             val borderColor = if (hoveredIndex == index) {
