@@ -120,6 +120,12 @@ class AdquisicionesViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.d("API_RESPONSE", "Adquisición ${accion.lowercase(Locale.ROOT)} exitosamente: ${response.body()}")
 
+                    // 🔥 Actualizar la lista localmente
+                    _adquisiciones.value = _adquisiciones.value.map { adquisicion ->
+                        if (adquisicion.id == id) adquisicion.copy(estado = accion)
+                        else adquisicion
+                    }
+
                     onSuccess()
                 } else {
                     Log.e("API_ERROR", "Error en la API: ${response.code()} - ${response.message()}")
