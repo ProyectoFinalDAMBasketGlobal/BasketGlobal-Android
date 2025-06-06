@@ -2,6 +2,7 @@ package dam.intermodular.app.productos.view
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -9,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -41,6 +43,14 @@ fun ProductoDetailsFragment(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFFFFE0B2), // Claro arriba
+                        Color(0xFFFFCC80)  // Más oscuro abajo
+                    )
+                )
+            )
             .padding(25.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -122,7 +132,7 @@ fun ProductoDetailsFragment(
             style = MaterialTheme.typography.bodyMedium
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Descripción
         Text(
@@ -139,7 +149,7 @@ fun ProductoDetailsFragment(
             fontSize = 17.sp
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Precio de la habitación
         Text(
@@ -156,7 +166,7 @@ fun ProductoDetailsFragment(
             fontSize = 17.sp
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         // Precio de la habitación
         Text(
@@ -173,7 +183,7 @@ fun ProductoDetailsFragment(
             fontSize = 17.sp
         )
 
-        Spacer(modifier = Modifier.height(13.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Button(
             onClick = {
