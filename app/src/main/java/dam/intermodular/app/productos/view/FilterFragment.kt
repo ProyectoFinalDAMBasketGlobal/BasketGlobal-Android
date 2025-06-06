@@ -39,7 +39,7 @@ fun FilterFragment(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Filtro de tipo de habitación
+                    // Filtro de tipo de producto
                     Text("Tipo de producto:")
                     TextField(
                         value = type,
