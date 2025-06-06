@@ -79,7 +79,7 @@ class ProductosViewModel @Inject constructor(
     fun filterByName(query: String) {
         _filteredProductos.update {
             if (query.isEmpty()) productos.value
-            else productos.value.filter { it.nombre.startsWith(query, ignoreCase = true) }
+            else productos.value.filter { it.categoria.startsWith(query, ignoreCase = true) }
         }
     }
 
