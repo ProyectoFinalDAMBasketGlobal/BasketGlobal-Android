@@ -23,36 +23,29 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 
 // Generador de notificaciones promocionales y persuasivas
 fun generarNotificacion(): String {
-    val inicios = listOf(
-        "¡No te lo pierdas!",
-        "Novedades en BasketGlobal:",
-        "Solo por hoy:",
-        "Estás a un clic de mejorar tu juego.",
-        "Tu estilo en la cancha merece esto:"
-    )
 
     val promociones = listOf(
         "Nuevas camisetas retro de leyendas del baloncesto.",
-        "Balones oficiales con 20% de descuento.",
+        "Balones oficiales con descuento.",
         "Zapatillas de alto rendimiento recién llegadas.",
         "Merchandising exclusivo de equipos NBA.",
-        "Sudaderas y gorras con diseños únicos de baloncesto."
+        "Sudaderas y gorras con diseños únicos"
     )
 
     val llamados = listOf(
         "Explora ahora en la tienda.",
-        "Haz clic y descúbrelo.",
         "No dejes pasar esta oportunidad.",
         "Equípate como un profesional.",
         "La oferta expira pronto."
     )
 
-    return "${inicios.random()} ${promociones.random()} ${llamados.random()}"
+    return "${promociones.random()} ${llamados.random()}"
 }
 
 @Composable
@@ -74,7 +67,7 @@ fun Notification(
         if (isVisible && notificaciones.isEmpty()) {
             // La ventana se abrió y no hay notificaciones
             if (hasClosed.value) {
-                repeat(5) { notificaciones.add(generarNotificacion()) }
+                repeat(3) { notificaciones.add(generarNotificacion()) }
                 hasClosed.value = false
             }
         }
@@ -87,10 +80,17 @@ fun Notification(
     if (isVisible) {
         AlertDialog(
             onDismissRequest = onDismiss,
-            title = { Text("Promociones", color = MaterialTheme.colorScheme.primary) },
+            title = {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Anuncios", color = MaterialTheme.colorScheme.primary)
+                }
+            },
             text = {
                 Box(modifier = Modifier.height(400.dp)) {
-                    Column {
+                    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
                         notificaciones.toList().forEachIndexed { index, notification ->
                             val borderColor = if (hoveredIndex == index) {
                                 MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)
@@ -100,18 +100,17 @@ fun Notification(
 
                             var offsetX by remember { mutableFloatStateOf(0f) }
 
-                            Text(
-                                text = notification,
+                            Card(
+                                shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 4.dp)
+                                    .padding(bottom = 8.dp)
                                     .border(
                                         width = 2.dp,
                                         color = borderColor,
                                         shape = RoundedCornerShape(8.dp)
                                     )
-                                    .padding(5.dp)
-                                    .pointerInput(notification) { // Usar el texto como clave estable
+                                    .pointerInput(notification) {
                                         detectHorizontalDragGestures { _, dragAmount ->
                                             offsetX += dragAmount
                                             if (kotlin.math.abs(offsetX) > 100f) {
@@ -119,13 +118,25 @@ fun Notification(
                                             }
                                         }
                                     },
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
+                            ) {
+                                Text(
+                                    text = notification,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp),
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                            }
+
                             Spacer(modifier = Modifier.height(15.dp))
                         }
 
                         if (notificaciones.isEmpty()) {
-                            Text("¡Has eliminado todas las notificaciones!", color = MaterialTheme.colorScheme.secondary)
+                            Text(
+                                "¡Has eliminado todas las notificaciones!",
+                                color = MaterialTheme.colorScheme.secondary
+                            )
                         }
                     }
                 }
