@@ -250,7 +250,7 @@ fun MainScreen(navController: NavHostController, productosViewModel: ProductosVi
                             IconButton(onClick = {
                                 Toast.makeText(
                                     context,
-                                    "¡BIENVENIDOS A NIGHT DAYS!",
+                                    "¡GRACIAS POR CONFIAR EN NOSOTROS!",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }) {
