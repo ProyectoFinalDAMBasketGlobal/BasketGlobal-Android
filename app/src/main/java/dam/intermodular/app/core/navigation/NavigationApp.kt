@@ -54,7 +54,7 @@ fun NavigationApp(){
     val isChekingToken by viewModelLogin.isCheckingToken.collectAsState()
 
 
-    NavHost(navController=navController, startDestination = "main_screen")
+    NavHost(navController=navController, startDestination = "login_screen")
     {
         composable("login_screen") {
             LoginScreen(
