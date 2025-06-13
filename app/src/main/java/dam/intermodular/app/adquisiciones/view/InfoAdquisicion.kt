@@ -46,7 +46,7 @@ fun InfoAdquisicionScreen(navController: NavHostController, adquisicion: Adquisi
         ) {
             InfoItem(label = "ID", value = adquisicion.id)
             InfoItem(label = "Usuario", value = adquisicion.idUsu)
-            InfoItem(label = "Habitación", value = adquisicion.idPro)
+            InfoItem(label = "Producto", value = adquisicion.idPro)
             InfoItem(label = "Check-in", value = formatearFecha(adquisicion.fechaAdquisicion))
             InfoItem(label = "Cantidad", value = adquisicion.cantidad.toString())
             InfoItem(label = "Estado", value = adquisicion.estado)
