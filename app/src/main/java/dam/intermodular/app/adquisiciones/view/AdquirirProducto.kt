@@ -73,7 +73,7 @@ fun AdquirirProductoScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Información de la habitación en recuadros con bordes
+            // Información del producto en recuadros con bordes
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -127,7 +127,7 @@ fun AdquirirProductoScreen(
                         "" // Borra el error si el valor es válido
                     }
                 },
-                label = { Text("Número de huéspedes (Máximo: $stockProducto)") },
+                label = { Text("Número de productos (Máximo: $stockProducto)") },
                 singleLine = true,
                 isError = errorMessage.isNotEmpty(), // Muestra error si hay mensaje
                 modifier = Modifier.fillMaxWidth(),
