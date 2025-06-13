@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -14,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import dam.intermodular.app.adquisiciones.model.Adquisicion
 import dam.intermodular.app.adquisiciones.viewmodel.AdquisicionesViewModel
@@ -28,11 +27,12 @@ import java.util.Locale
 fun ModificarAdquisicionScreen(
     navController: NavHostController,
     adquisicion: Adquisicion,
-    reservaViewModel: AdquisicionesViewModel = viewModel()
+    reservaViewModel: AdquisicionesViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     var fechaEntrada by remember { mutableStateOf(adquisicion.fechaAdquisicion) }
-    var estado by remember { mutableStateOf(adquisicion.estado) }
+    //var estado by remember { mutableStateOf(adquisicion.estado) }
+    var cantidad by remember { mutableStateOf(adquisicion.cantidad.toString()) }
     var isUpdating by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) } // Para el menú desplegable
 
@@ -92,39 +92,17 @@ fun ModificarAdquisicionScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Menú desplegable para Estado de la Reserva
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = it }
-            ) {
-                OutlinedTextField(
-                    value = estado,
-                    onValueChange = { },
-                    label = { Text("Estado") },
-                    readOnly = true,
-                    modifier = Modifier.fillMaxWidth().menuAnchor(),
-                    trailingIcon = {
-                        IconButton(onClick = { expanded = true }) {
-                            Icon(Icons.Filled.ArrowDropDown, contentDescription = "Desplegar menú")
-                        }
+            OutlinedTextField(
+                value = cantidad,
+                onValueChange = {
+                    if (it.all { char -> char.isDigit() }) {
+                        cantidad = it
                     }
-                )
-
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    estados.forEach { opcion ->
-                        DropdownMenuItem(
-                            text = { Text(opcion) },
-                            onClick = {
-                                estado = opcion
-                                expanded = false
-                            }
-                        )
-                    }
-                }
-            }
+                },
+                label = { Text("Cantidad") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -140,8 +118,8 @@ fun ModificarAdquisicionScreen(
                             adquisicion.idUsu,
                             adquisicion.idPro,
                             fechaEntrada,
-                            adquisicion.cantidad,
-                            estado,
+                            cantidad.toIntOrNull() ?: adquisicion.cantidad,
+                            adquisicion.estado,
                             onSuccess = {
                                 isUpdating = false
                                 Toast.makeText(context, "Adquisicion actualizada con éxito", Toast.LENGTH_SHORT).show()
